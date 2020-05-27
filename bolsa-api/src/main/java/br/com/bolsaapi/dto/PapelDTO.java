@@ -2,7 +2,7 @@ package br.com.bolsaapi.dto;
 
 import java.io.Serializable;
 
-public class Papel implements Serializable {
+public class PapelDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,9 +16,9 @@ public class Papel implements Serializable {
 	private Double ultimo;
 	private Double oscilacao;
 
-	public Papel() {}
+	public PapelDTO() {}
 
-	public Papel( String codigo, String nome, String data, Double abertura, Double minimo, Double maximo, Double medio, Double ultimo, Double oscilacao ) {
+	public PapelDTO( String codigo, String nome, String data, Double abertura, Double minimo, Double maximo, Double medio, Double ultimo, Double oscilacao ) {
 		super();
 		this.codigo = codigo;
 		this.nome = nome;

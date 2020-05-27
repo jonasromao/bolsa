@@ -1,6 +1,5 @@
 package br.com.bolsaapi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -16,15 +15,15 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.stereotype.Component;
 
-import br.com.bolsaapi.dto.Email;
+import br.com.bolsaapi.dto.EmailDTO;
 
 @Component
-public class EmailBusiness {
+public class EmailService {
+	
+	private String remetente = System.getenv("MAIL_REMETENTE");
+	private String senha = System.getenv("MAIL_SENHA");
 
-	public void sendMail( List<String> destinatarios, Email email ) {
-
-		String remetente = "bolsaapinaoresponda@gmail.com";
-		String senha = "@JOSErato123";
+	public void sendMail( List<String> destinatarios, EmailDTO email ) {
 
 		Session session = getSession( remetente, senha );
 
@@ -33,7 +32,6 @@ public class EmailBusiness {
 			transport.connect( "smtp.gmail.com", 587, remetente, senha );
 			sendEmail( transport, session, remetente, destinatarios, email );
 		} catch ( Exception e ) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -41,7 +39,7 @@ public class EmailBusiness {
 		
 	}
 
-	private Message getMessage( Session session, String remetente, List<String> destinatarios, Email email ) throws AddressException, MessagingException {
+	private Message getMessage( Session session, String remetente, List<String> destinatarios, EmailDTO email ) throws AddressException, MessagingException {
 		Message message = new MimeMessage( session );
 		message.setFrom( new InternetAddress( remetente ) );
 
@@ -63,7 +61,7 @@ public class EmailBusiness {
 		return message;
 	}
 
-	private void sendEmail( Transport transport, Session session, String remetente, List<String> destinatarios, Email email ) throws InterruptedException, AddressException, MessagingException {
+	private void sendEmail( Transport transport, Session session, String remetente, List<String> destinatarios, EmailDTO email ) throws InterruptedException, AddressException, MessagingException {
 
 		Message message = getMessage( session, remetente, destinatarios, email );
 

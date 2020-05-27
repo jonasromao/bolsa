@@ -1,6 +1,7 @@
 package br.com.bolsaapi.client;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -11,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import br.com.bolsaapi.dto.Papel;
+import br.com.bolsaapi.dto.PapelDTO;
+import br.com.bolsaapi.enums.BovespaClientFieldsEnum;
+import br.com.bolsaapi.model.PapelAnalise;
 
 @Component
 public class BovespaClient {
@@ -20,7 +23,22 @@ public class BovespaClient {
 
 	private static final String GET_URL = "http://bvmf.bmfbovespa.com.br/cotacoes2000/FormConsultaCotacoes.asp?strListaCodigos=BBPO11%7C";
 
-	public Papel getAcao( String codigoAcao ) {
+	public List<PapelDTO> getAcoes( List<PapelAnalise> papeisAnalise ) {
+
+		ArrayList<PapelDTO> papeis = new ArrayList<PapelDTO>();
+
+		papeisAnalise.forEach( papelAnalise -> {
+
+			PapelDTO papelDTO = getAcao( papelAnalise.getPapel().getCodigo() );
+			if( papelDTO != null ) {
+				papeis.add( papelDTO );
+			}
+		} );
+
+		return papeis;
+	}
+
+	public PapelDTO getAcao( String codigoAcao ) {
 
 		try {
 
@@ -48,27 +66,35 @@ public class BovespaClient {
 
 			Node acao = papeis.get( 1 );
 
-			Element element = ( Element ) acao;
-
-			Papel papel = new Papel();
-
-			papel.setAbertura( Double.valueOf( element.attribute( "Abertura" ).getValue().replace( ",", "." )) );
-			papel.setCodigo( element.attribute( "Codigo" ).getValue() );
-			papel.setData( element.attribute( "Data" ).getValue() );
-			papel.setNome( element.attribute( "Nome" ).getValue() );
-			papel.setMinimo( Double.valueOf( element.attribute( "Minimo" ).getValue().replace( ",", "." )) );
-			papel.setMaximo( Double.valueOf( element.attribute( "Maximo" ).getValue().replace( ",", "." )) );
-			papel.setMedio( Double.valueOf( element.attribute( "Medio" ).getValue().replace( ",", "." )) );
-			papel.setUltimo( Double.valueOf( element.attribute( "Ultimo" ).getValue().replace( ",", "." )) );
-			papel.setOscilacao( Double.valueOf( element.attribute( "Oscilacao" ).getValue().replace( ",", "." )) );
+			PapelDTO papelDTO = toPapelDTO(acao);
 
 			LOGGER.info( "Ação preenchida com sucesso" );
 			LOGGER.info( "Finalizado processo" );
 
-			return papel;
+			return papelDTO;
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	private PapelDTO toPapelDTO(Node nodeAcao) {
+		
+		Element element = ( Element ) nodeAcao;
+
+		PapelDTO papel = new PapelDTO();
+
+		papel.setAbertura( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Abertura.name() ).getValue().replace( ",", "." ) ) );
+		papel.setCodigo( element.attribute( BovespaClientFieldsEnum.Codigo.name() ).getValue() );
+		papel.setData( element.attribute( BovespaClientFieldsEnum.Data.name() ).getValue() );
+		papel.setNome( element.attribute( BovespaClientFieldsEnum.Nome.name() ).getValue() );
+		papel.setMinimo( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Minimo.name()).getValue().replace( ",", "." ) ) );
+		papel.setMaximo( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Maximo.name() ).getValue().replace( ",", "." ) ) );
+		papel.setMedio( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Medio.name() ).getValue().replace( ",", "." ) ) );
+		papel.setUltimo( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Ultimo.name() ).getValue().replace( ",", "." ) ) );
+		papel.setOscilacao( Double.valueOf( element.attribute( BovespaClientFieldsEnum.Oscilacao.name()).getValue().replace( ",", "." ) ) );
+		
+		return papel;
+		
 	}
 }

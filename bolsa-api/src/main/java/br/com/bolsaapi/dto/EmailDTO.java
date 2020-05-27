@@ -1,12 +1,12 @@
 package br.com.bolsaapi.dto;
 
-public class Email {
+public class EmailDTO {
 
 	private String titulo;
 
 	private String corpo;
 
-	public Email() {}
+	public EmailDTO() {}
 
 	public String getTitulo() {
 		return titulo;
