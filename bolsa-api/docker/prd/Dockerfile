@@ -1,3 +1,3 @@
 FROM openjdk:11
-COPY consulta-cep-*.jar app.jar
+COPY bolsa-api-*.jar app.jar
 ENTRYPOINT ["java","-Dspring.profiles.active=prd","-jar","/app.jar"]

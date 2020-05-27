@@ -52,15 +52,15 @@ public class BovespaClient {
 
 			Papel papel = new Papel();
 
-			papel.setAbertura( element.attribute( "Abertura" ).getValue() );
+			papel.setAbertura( Double.valueOf( element.attribute( "Abertura" ).getValue().replace( ",", "." )) );
 			papel.setCodigo( element.attribute( "Codigo" ).getValue() );
 			papel.setData( element.attribute( "Data" ).getValue() );
 			papel.setNome( element.attribute( "Nome" ).getValue() );
-			papel.setMinimo( element.attribute( "Minimo" ).getValue() );
-			papel.setMaximo( element.attribute( "Maximo" ).getValue() );
-			papel.setMedio( element.attribute( "Medio" ).getValue() );
-			papel.setUltimo( element.attribute( "Ultimo" ).getValue() );
-			papel.setOscilacao( element.attribute( "Oscilacao" ).getValue() );
+			papel.setMinimo( Double.valueOf( element.attribute( "Minimo" ).getValue().replace( ",", "." )) );
+			papel.setMaximo( Double.valueOf( element.attribute( "Maximo" ).getValue().replace( ",", "." )) );
+			papel.setMedio( Double.valueOf( element.attribute( "Medio" ).getValue().replace( ",", "." )) );
+			papel.setUltimo( Double.valueOf( element.attribute( "Ultimo" ).getValue().replace( ",", "." )) );
+			papel.setOscilacao( Double.valueOf( element.attribute( "Oscilacao" ).getValue().replace( ",", "." )) );
 
 			LOGGER.info( "Ação preenchida com sucesso" );
 			LOGGER.info( "Finalizado processo" );
